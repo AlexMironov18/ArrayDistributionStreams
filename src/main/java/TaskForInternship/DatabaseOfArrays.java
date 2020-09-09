@@ -1,13 +1,14 @@
 package TaskForInternship;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseOfArrays {
 
-    ArrayList<Integer> dividerByThree;
-    ArrayList<Integer> dividerBySeven;
-    ArrayList<Integer> dividerByTwentyone;
-    ArrayList<Integer> theEnteredArray;
+    List<Integer> dividerByThree;
+    List<Integer> dividerBySeven;
+    List<Integer> dividerByTwentyone;
+    List<Integer> theEnteredArray;
 
     public void createArrays() {
         theEnteredArray = new ArrayList<>();

@@ -1,41 +1,26 @@
 package TaskForInternship;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TheAction implements TheActionInterface {
 
     @Override
     public void makeArrays(int[] arrayOfNumbers, DatabaseOfArrays databaseOfArrays) {
-        if (arrayOfNumbers.length != 0){
-            for (int i : arrayOfNumbers) {
-                databaseOfArrays.theEnteredArray.add(Integer.valueOf(i));
-            }
-            for (int i = 0; i < arrayOfNumbers.length; i++) {
-                if (arrayOfNumbers[i] % 3 == 0) {
-                    databaseOfArrays.dividerByThree.add(arrayOfNumbers[i]);
-                }
-                if (arrayOfNumbers[i] % 7 == 0) {
-                    databaseOfArrays.dividerBySeven.add(arrayOfNumbers[i]);
-                }
-                if (arrayOfNumbers[i] % 21 == 0) {
-                    databaseOfArrays.dividerByTwentyone.add(arrayOfNumbers[i]);
-                }
-            }
-        }
+        databaseOfArrays.theEnteredArray = Arrays.stream(arrayOfNumbers).boxed().sorted().collect(Collectors.toList());
+        databaseOfArrays.dividerByThree = Arrays.stream(arrayOfNumbers).boxed().filter(s -> s % 3 == 0).collect(Collectors.toList());
+        databaseOfArrays.dividerBySeven = Arrays.stream(arrayOfNumbers).boxed().filter(s -> s % 7 == 0).collect(Collectors.toList());
+        databaseOfArrays.dividerByTwentyone = Arrays.stream(arrayOfNumbers).boxed().filter(s -> s % 21 == 0).collect(Collectors.toList());
         printAll(databaseOfArrays);
     }
 
     @Override
     public void checkOdds(DatabaseOfArrays databaseOfArrays) {
-        HashSet<Integer> enteredSet = new HashSet<>(databaseOfArrays.theEnteredArray);
-        ArrayList<Integer> mergedArrays = new ArrayList<>();
-        mergedArrays.addAll(databaseOfArrays.dividerByThree);
-        mergedArrays.addAll(databaseOfArrays.dividerBySeven);
-        mergedArrays.addAll(databaseOfArrays.dividerByTwentyone);
-        HashSet<Integer> mergedSet = new HashSet<>(mergedArrays);
-        System.out.println(enteredSet.equals(mergedSet));
+        List<Integer> mergedList = Stream.concat(Stream.concat(databaseOfArrays.dividerByThree.stream(), databaseOfArrays.dividerBySeven.stream()),
+                databaseOfArrays.dividerByTwentyone.stream()).distinct().sorted().collect(Collectors.toList());
+        System.out.println(mergedList.equals(databaseOfArrays.theEnteredArray));
     }
 
     @Override
@@ -88,17 +73,13 @@ public class TheAction implements TheActionInterface {
                 databaseOfArrays.dividerByTwentyone.isEmpty()) {
             System.out.println("Список пуст");
         } else {
-            databaseOfArrays.theEnteredArray.clear();
-            ArrayList<Integer> mergedArray = new ArrayList<>(databaseOfArrays.dividerByThree);
-            mergedArray.addAll(databaseOfArrays.dividerBySeven);
-            mergedArray.addAll(databaseOfArrays.dividerByTwentyone);
+            List<Integer> mergedList = Stream.concat(Stream.concat(databaseOfArrays.dividerByThree.stream(), databaseOfArrays.dividerBySeven.stream()),
+                    databaseOfArrays.dividerByTwentyone.stream()).distinct().sorted().collect(Collectors.toList());
+            System.out.println(mergedList);
             databaseOfArrays.dividerByThree.clear();
             databaseOfArrays.dividerBySeven.clear();
             databaseOfArrays.dividerByTwentyone.clear();
-            HashSet setOfNumber = new HashSet(mergedArray);
-            mergedArray = new ArrayList<>(setOfNumber);
-            Collections.sort(mergedArray);
-            System.out.println(mergedArray);
+            databaseOfArrays.theEnteredArray.clear();
         }
     }
 
